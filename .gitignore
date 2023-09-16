@@ -3,3 +3,6 @@ env/
 
 # log file
 my_log.txt
+
+# cache file
+__pycache__/
