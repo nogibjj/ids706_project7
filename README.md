@@ -1,6 +1,6 @@
 # ids706_python_template
 Week2 homework for ids706: 
-Write a script to read dataset Book.xlsx, visualize the data and generate the pdf report
+- Write a script to read dataset Book.xlsx, visualize the data and generate the pdf report
 
 ## Requirements
 

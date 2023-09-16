@@ -1,0 +1,5 @@
+# virtual environment
+env/
+
+# log file
+my_log.txt
