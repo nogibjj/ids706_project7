@@ -1,0 +1,7 @@
+# requirements.txt
+flake8
+pytest
+pandas
+matplotlib
+fpdf2
+openpyxl
