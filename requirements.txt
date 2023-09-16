@@ -1,7 +1,9 @@
 # requirements.txt
+black
 flake8
 pytest
 pandas
 matplotlib
 fpdf2
 openpyxl
+pylint
