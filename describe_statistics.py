@@ -1,5 +1,6 @@
-#!/usr/bin/env_ids706hw2 python
+#!/usr/bin/env python3
 
+import polars as pl
 import pandas as pd
 import matplotlib.pyplot as plt
 from fpdf import FPDF
@@ -7,28 +8,42 @@ from fpdf import FPDF
 
 def read_dataset(file_path):
     if file_path.endswith(".csv"):
-        return pd.read_csv(file_path)
+        return pl.read_csv(file_path)
     elif file_path.endswith(".xlsx") or file_path.endswith(".xls"):
-        return pd.read_excel(file_path)
+        pandas_df = pd.read_excel(file_path)
+        polars_df = pl.DataFrame(pandas_df)
+        return polars_df
     else:
         raise ValueError("Unsupported file type")
 
 
+def get_mean(df: pl.DataFrame, col: str):
+    return df[col].mean()
+
+
+def get_median(df: pl.DataFrame, col: str):
+    return df[col].median()
+
+
+def get_std(df: pl.DataFrame, col: str):
+    return df[col].std()
+
+
 def calculate_summary_statistics(df):
     stock_stats = {
-        "Mean": df["Stock"].mean(),
-        "Median": df["Stock"].median(),
-        "Standard Deviation": df["Stock"].std(),
+        "Mean": get_mean(df, "Stock"),
+        "Median": get_median(df, "Stock"),
+        "Standard Deviation": get_std(df, "Stock"),
     }
 
     sold_stats = {
-        "Mean": df["Sold"].mean(),
-        "Median": df["Sold"].median(),
-        "Standard Deviation": df["Sold"].std(),
+        "Mean": get_mean(df, "Sold"),
+        "Median": get_median(df, "Sold"),
+        "Standard Deviation": get_std(df, "Sold"),
     }
 
-    print(stock_stats)
-    print(sold_stats)
+    # print(stock_stats)
+    # print(sold_stats)
     print("Current Stock Summary Statistics:")
     for key, value in stock_stats.items():
         print(f"{key}: {value}")
@@ -41,28 +56,34 @@ def calculate_summary_statistics(df):
 
 
 def create_data_visualization(df):
-    _, axes = plt.subplots(2, 1, figsize=(10, 10))
+    # Stock bar chart
+    Book_Name = df.select(pl.col("Book Name")).to_numpy().flatten().astype(str)
+    Stock = df.select(pl.col("Stock")).to_numpy().flatten()
+    Sold = df.select(pl.col("Sold")).to_numpy().flatten()
+
+    # Create a figure with 2 subplots: 2 rows, 1 column
+    _, axs = plt.subplots(2, 1, figsize=(8, 10))
 
     # Plotting Stock bar chart
-    axes[0].bar(df["Book Name"], df["Stock"], color="blue")
-    axes[0].set_title("Fig 1. Current Stock of the Book in the Store", fontsize=16)
-    axes[0].set_xlabel("Book Name", fontsize=16)
-    axes[0].set_ylabel("Current Stock", fontsize=16)
-    axes[0].tick_params(axis="x", rotation=45)
+    axs[0].bar(Book_Name, Stock, color="blue")
+    axs[0].set_title("Fig 1. Current Stock of the Book in the Store", fontsize=16)
+    axs[0].set_xlabel("Book Name", fontsize=16)
+    axs[0].set_ylabel("Current Stock", fontsize=16)
+    axs[0].tick_params(axis="x", rotation=45)
 
     # Plotting Pages bar chart
-    axes[1].bar(df["Book Name"], df["Sold"], color="green")
-    axes[1].set_title("Fig 2. Books Already Sold", fontsize=16)
-    axes[1].set_xlabel("Book Name", fontsize=16)
-    axes[1].set_ylabel("Books Sold", fontsize=16)
-    axes[1].tick_params(axis="x", rotation=45)
+    axs[1].bar(Book_Name, Sold, color="green")
+    axs[1].set_title("Fig 2. Books Already Sold", fontsize=16)
+    axs[1].set_xlabel("Book Name", fontsize=16)
+    axs[1].set_ylabel("Books Sold", fontsize=16)
+    axs[1].tick_params(axis="x", rotation=45)
 
     plt.tight_layout()
     plt.savefig("plot.png")
     plt.show()
 
 
-def generate_report(stock_stats, sold_stats):
+def generate_report(df):
     pdf = FPDF()
 
     # Add a page
@@ -100,34 +121,16 @@ def generate_report(stock_stats, sold_stats):
 
     pdf.set_font("Times", "B", 14)
 
-    pdf.cell(
-        200,
-        10,
-        txt="Part 2: Statistics Analysis of the Best Sellers",
-        ln=True,
-        align="L",
-    )
+    for col_name in ["Stock", "Sold"]:
+        mean_val = df[col_name].mean()
+        median_val = df[col_name].median()
+        std_val = df[col_name].std()
 
-    pdf.set_font("Times", "", 10)
-
-    txt_mean = (
-        f"1. Mean of Current Stock: {stock_stats['Mean']}, "
-        f"Mean of the Books Sold: {sold_stats['Mean']}"
-    )
-    pdf.cell(200, 10, txt=txt_mean, ln=True, align="L")
-
-    txt_median = (
-        f"2. Median of Current Stock: {stock_stats['Median']}, "
-        f"Median of the Books Sold: {sold_stats['Median']}"
-    )
-    pdf.cell(200, 10, txt=txt_median, ln=True, align="L")
-
-    txt_std = (
-        "3. Std of Current Stock: "
-        f"{stock_stats['Standard Deviation']}, "
-        f"Std of the Books Sold: {sold_stats['Standard Deviation']}"
-    )
-    pdf.cell(200, 10, txt=txt_std, ln=True, align="L")
+        pdf.cell(200, 10, txt=f"Statistics for {col_name}:", ln=True, align="L")
+        pdf.cell(200, 10, txt=f"1. Mean: {mean_val}", ln=True, align="L")
+        pdf.cell(200, 10, txt=f"2. Median: {median_val}", ln=True, align="L")
+        pdf.cell(200, 10, txt=f"3. Standard Deviation: {std_val}", ln=True, align="L")
+        pdf.ln(10)
 
     # save the pdf with name .pdf
     pdf.output("statistics_report.pdf")
@@ -136,11 +139,12 @@ def generate_report(stock_stats, sold_stats):
 def main():
     # Adjust with your file path
     dataset = read_dataset("./Book.xlsx")
+    # print(dataset.describe())
     print(dataset)
 
-    stock_stats, sold_stats = calculate_summary_statistics(dataset)
+    _, _ = calculate_summary_statistics(dataset)
     create_data_visualization(dataset)
-    generate_report(stock_stats, sold_stats)
+    generate_report(dataset)
 
 
 if __name__ == "__main__":

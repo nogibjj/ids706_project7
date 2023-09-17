@@ -1,9 +1,13 @@
 # requirements.txt
+# for CI-CD
 black
-flake8
 pytest
-pandas
+pylint
+
+# used for data analysis
+polars==0.10.26
 matplotlib
 fpdf2
 openpyxl
-pylint
+pandas
+pyarrow

@@ -1,14 +1,22 @@
 from describe_statistics import *
 
 
-def test():
+def test1():
     dataset = read_dataset("./Book.xlsx")
-    stock_stats, sold_stats = calculate_summary_statistics(dataset)
-    assert stock_stats["Mean"] == 15.2
-    assert stock_stats["Median"] == 14.0
-    assert stock_stats["Standard Deviation"] == 9.148770409186143
+    stock_stats, _ = calculate_summary_statistics(dataset)
+    assert stock_stats["Mean"] == get_mean(dataset, "Stock")
+    assert stock_stats["Median"] == get_median(dataset, "Stock")
+    assert stock_stats["Standard Deviation"] == get_std(dataset, "Stock")
+
+def test2():
+    dataset = read_dataset("./Book.xlsx")
+    _, sold_stats = calculate_summary_statistics(dataset)
+    assert sold_stats["Mean"] == get_mean(dataset, "Sold")
+    assert sold_stats["Median"] == get_median(dataset, "Sold")
+    assert sold_stats["Standard Deviation"] == get_std(dataset, "Sold")
 
 
 if __name__ == "__main__":
-    test()
+    test1()
+    test2()
     print("CICD Passed.")

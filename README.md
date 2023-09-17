@@ -13,6 +13,7 @@ Week2 homework for ids706:
 2. cd to the directory: ~/ids706/hw2/ids706_hw2/
 3. Run `make setup` to set up the virtual environment
 4. Run `make install` to install all the packages needed as shown in requirement
+- polars==0.10.26 to ensure that the program functions well
 5. Run `make lint` to check up the style
 6. Run `make format` to check up the format
 7. Run `make test` to test the code with pylint and the test cases in test_stat.py
