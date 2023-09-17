@@ -121,6 +121,14 @@ def generate_report(df):
 
     pdf.set_font("Times", "B", 14)
 
+    pdf.cell(
+        200,
+        10,
+        txt="Part 2: Statistics Analysis of the Best Sellers",
+        ln=True,
+        align="L",
+    )
+
     for col_name in ["Stock", "Sold"]:
         mean_val = df[col_name].mean()
         median_val = df[col_name].median()
