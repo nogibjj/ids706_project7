@@ -1,6 +1,6 @@
 # ids706_python_template
-Week2 homework for ids706: 
-- Write a script to read dataset Book.xlsx, visualize the data and generate the pdf report
+Week3 homework for ids706: 
+- Write a script to read dataset Book.xlsx, visualize the data and generate the pdf report with polars library
 
 ## Requirements
 
@@ -10,7 +10,7 @@ Week2 homework for ids706:
 
 ## Setup and Check Format
 1. Clone the repository
-2. cd to the directory: ~/ids706/hw2/ids706_hw2/
+2. cd to the directory: ~/ids706_week3_MiniProject_LinkeLi
 3. Run `make setup` to set up the virtual environment
 4. Run `make install` to install all the packages needed as shown in requirement
 - polars==0.10.26 to ensure that the program functions well
@@ -20,7 +20,7 @@ Week2 homework for ids706:
 you can add more test cases in test_stat.py
 
 ## Useage
-8. Run `make run` to generate data visualization and report in ~/ids706/hw2/ids706_hw2/
+8. Run `make run` to generate data visualization and report to ~/ids706_week3_MiniProject_LinkeLi
 
 - To combine step 3~8 as stated above, you can run `make all` directly
 
