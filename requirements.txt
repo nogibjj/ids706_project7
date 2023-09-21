@@ -12,6 +12,7 @@ ruff==0.0.284
 # data processing
 polars==0.10.26
 pandas
+pyarrow
 # excel
 openpyxl
 # for data visualization
