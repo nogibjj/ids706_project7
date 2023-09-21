@@ -3,7 +3,6 @@
 import polars as pl
 import pandas as pd
 import matplotlib.pyplot as plt
-from fpdf import FPDF
 
 
 def read_dataset(file_path):
@@ -81,79 +80,3 @@ def create_data_visualization(df):
     plt.tight_layout()
     plt.savefig("plot.png")
     plt.show()
-
-
-def generate_report(df):
-    pdf = FPDF()
-
-    # Add a page
-    pdf.add_page()
-
-    # Set font
-    pdf.set_font("Times", "B", 16)
-
-    # Adding a cell for Title
-    pdf_title = (
-        "Descriptive Statistics Report "
-        "for the Best Sellers of KK's Book Shelf (2023)"
-    )
-
-    pdf.cell(200, 10, txt=pdf_title, ln=True, align="C")
-
-    # Line break
-    pdf.ln(10)
-
-    # image
-    pdf.set_font("Times", "B", 14)
-
-    pdf.cell(
-        200,
-        10,
-        txt="Part 1: Data Visualization of the Best Sellers",
-        ln=True,
-        align="L",
-    )
-
-    pdf.image("plot.png", x=10, y=None, w=100)
-
-    # Add Statistics
-    pdf.ln(5)
-
-    pdf.set_font("Times", "B", 14)
-
-    pdf.cell(
-        200,
-        10,
-        txt="Part 2: Statistics Analysis of the Best Sellers",
-        ln=True,
-        align="L",
-    )
-
-    for col_name in ["Stock", "Sold"]:
-        mean_val = df[col_name].mean()
-        median_val = df[col_name].median()
-        std_val = df[col_name].std()
-
-        pdf.cell(200, 10, txt=f"Statistics for {col_name}:", ln=True, align="L")
-        pdf.cell(200, 10, txt=f"1. Mean: {mean_val}", ln=True, align="L")
-        pdf.cell(200, 10, txt=f"2. Median: {median_val}", ln=True, align="L")
-        pdf.cell(200, 10, txt=f"3. Standard Deviation: {std_val}", ln=True, align="L")
-        pdf.ln(10)
-
-    # save the pdf with name .pdf
-    pdf.output("statistics_report.pdf")
-
-
-# def main():
-#     # Adjust with your file path
-#     dataset = read_dataset("./Book.xlsx")
-#     # print(dataset.describe())
-#     print(dataset)
-
-#     _, _ = calculate_summary_statistics(dataset)
-#     create_data_visualization(dataset)
-#     generate_report(dataset)
-
-
-# if __name__ == "__main__":
-#     main()
