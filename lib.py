@@ -144,16 +144,16 @@ def generate_report(df):
     pdf.output("statistics_report.pdf")
 
 
-def main():
-    # Adjust with your file path
-    dataset = read_dataset("./Book.xlsx")
-    # print(dataset.describe())
-    print(dataset)
+# def main():
+#     # Adjust with your file path
+#     dataset = read_dataset("./Book.xlsx")
+#     # print(dataset.describe())
+#     print(dataset)
 
-    _, _ = calculate_summary_statistics(dataset)
-    create_data_visualization(dataset)
-    generate_report(dataset)
+#     _, _ = calculate_summary_statistics(dataset)
+#     create_data_visualization(dataset)
+#     generate_report(dataset)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

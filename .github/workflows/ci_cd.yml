@@ -15,11 +15,9 @@ jobs:
       run: make setup
     - name: Install Dependencies
       run: make install
-    - name: Lint with pylint
+    - name: Lint with ruff
       run: make lint
-    - name: Check format
+    - name: Check format with black
       run: make format
-    - name: Test with pytest
+    - name: Test with lib.py, script.py, descriptive_stats.ipynb
       run: make test
-    - name: Run script and Generate Report
-      run: make run

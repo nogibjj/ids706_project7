@@ -2,7 +2,9 @@
 env/
 
 # log file
-my_log.txt
+# my_log.txt
 
 # cache file
 __pycache__/
+.ruff_cache
+.pytest_cache

@@ -1,13 +1,21 @@
 # requirements.txt
 # for CI-CD
+# format
 black
+# test
 pytest
-pylint
+nbval==0.9.6
+# lint
+ruff==0.0.284
 
 # used for data analysis
+# data processing
 polars==0.10.26
-matplotlib
-fpdf2
-openpyxl
 pandas
-pyarrow
+# excel
+openpyxl
+# for data visualization
+matplotlib
+
+# jupyter notebook
+jupyter==1.0.0
