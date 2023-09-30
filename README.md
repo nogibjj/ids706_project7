@@ -40,7 +40,7 @@ note: only need to set up the environment once
 GitHub Actions are configured for Continuous Integration and Continuous Deployment. See `.github/workflows/ci_cd.yml` for details.
 
 ## Video
-The link to the demo video is: 
+The link to the demo video is: https://youtu.be/D80YlpGayiE
 
 
 
