@@ -15,9 +15,7 @@ format:
 	./env/bin/black *.py 
 
 test:
-	./env/bin/python -m pytest test_script.py 
-	./env/bin/python -m pytest test_lib.py
-	./env/bin/python -m pytest descriptive_stats.ipynb --nbval
+	./env/bin/python -m pytest test_main.py 
 	
 		
 all: setup install lint format test 
