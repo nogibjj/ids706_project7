@@ -1,10 +1,9 @@
-import sqlite3
+import pymssql
 
 ### ---- Connect to Database ----- ###
 # initialize db and connect to database
 def connect_to_database():
     # connect to database
-    db_name = "book.db"
     # Connection details
     server = 'ids706server.database.windows.net'
     port = 1433
@@ -13,14 +12,16 @@ def connect_to_database():
     database = 'IDS706Database'
 
     # Build connection string
-    conn_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server},{port};DATABASE={database};UID={user};PWD={password}"
+    # conn_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server},{port};DATABASE={database};UID={user};PWD={password}"
 
     # Try to establish a connection
-    try:
-        with pyodbc.connect(conn_string) as connection:
-            print("Connected!")
-    except Exception as e:
-        print("Failed to connect to the database:", str(e))
+    # conn = pymssql.connect(server, user, password, database)
+    connection = pymssql.connect(server=server, port=port, user=user, password=password, database=database)
+    # try:
+    #     with pymssql.connect(server=server, port=port, user=user, password=password, database=database) as connection:
+    #         print("Connected!")
+    # except Exception as e:
+    #         print("Failed to connect to the database:", str(e))
     return connection
 
 
@@ -39,15 +40,8 @@ def create_table(connection, cursor, query_creation):
 
 
 # insert data to the table
-def insert_data(cursor, connection, sql_insertion, i1, i2, i3):
-    cursor.execute(
-        sql_insertion,
-        (
-            i1,
-            i2,
-            i3,
-        ),
-    )
+def insert_data(cursor, connection, sql_insertion, data_to_insert):
+    cursor.execute(sql_insertion, data_to_insert)
     connection.commit()
 
 
@@ -90,26 +84,50 @@ def fetch_books_ordered_by_name(cursor):
 
 def main():
     connection = connect_to_database()
-    '''
     # create cursor
     cursor = create_cursor(connection)
+
     # C: create a table
     query_creation = """
-    CREATE TABLE IF NOT EXISTS books (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        stock INTEGER NOT NULL,
-        comment TEXT
-    )
+    IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'books')
+    BEGIN
+        CREATE TABLE books (
+            name NVARCHAR(255) NOT NULL,
+            stock INT NOT NULL,
+            comment NVARCHAR(MAX)
+        )
+    END
     """
     create_table(connection, cursor, query_creation)
-    query_insertion = "INSERT INTO books (name, stock, comment) VALUES (?, ?, ?)"
-    insert_data(
-        cursor, connection, query_insertion, "Red Chamber", 30, "Uncopiable Love Story"
-    )
-    insert_data(
-        cursor, connection, query_insertion, "Educated", 35, "Meaning of Education"
-    )
+
+    
+    query_insertion = "INSERT INTO books (name, stock, comment) VALUES (@name, @stock, @comment)"
+
+    data1 ={
+            'name': 'Red Chamber',
+            'stock': 30,
+            'comment': 'Uncopiable Love Story'
+    }
+    insert_data(cursor, connection, query_insertion, data1)
+    data2 ={
+            'name': 'Educated',
+            'stock': 35,
+            'comment': 'Meaning of Education'
+    }
+    insert_data(cursor, connection, query_insertion, data2)
+    data3 ={
+            'name': 'Utopia',
+            'stock': 15,
+            'comment': 'A world of democracy imagined by Plato'
+    }
+    insert_data(cursor, connection, query_insertion, data3)
+    data4 ={
+            'name': 'Mob',
+            'stock': 23,
+            'comment': 'Psychological Reflection of the Group'
+    }
+    insert_data(cursor, connection, query_insertion, data4)
+    '''
     # R: read from table
     query_read = "SELECT * FROM books WHERE name=?"
     input_read = "Red Chamber"

@@ -5,11 +5,11 @@ setup:
 
 # install all the packages
 install:
-	./env/bin/pip install --upgrade pip &&\
-		./env/bin/pip install -r requirements.txt
+	pip install --upgrade pip &&\
+		pip install -r requirements.txt
 
 lint:
-	./env/bin/ruff check --fix .
+	ruff check --fix .
 
 format:	
 	./env/bin/black *.py 
