@@ -2,9 +2,27 @@ import sqlite3
 
 ### ---- Connect to Database ----- ###
 # initialize db and connect to database
-def connect_to_database(db):
-    connection = sqlite3.connect(db)
+def connect_to_database():
+    # connect to database
+    db_name = "book.db"
+    # Connection details
+    server = 'ids706server.database.windows.net'
+    port = 1433
+    user = 'azureuser'
+    password = 'Lilinke@#918918'
+    database = 'IDS706Database'
+
+    # Build connection string
+    conn_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server},{port};DATABASE={database};UID={user};PWD={password}"
+
+    # Try to establish a connection
+    try:
+        with pyodbc.connect(conn_string) as connection:
+            print("Connected!")
+    except Exception as e:
+        print("Failed to connect to the database:", str(e))
     return connection
+
 
 
 # create a cursor: a cursor is a database object used to traverse
@@ -71,9 +89,8 @@ def fetch_books_ordered_by_name(cursor):
 
 
 def main():
-    # connect to database
-    db_name = "book.db"
-    connection = connect_to_database(db_name)
+    connection = connect_to_database()
+    '''
     # create cursor
     cursor = create_cursor(connection)
     # C: create a table
@@ -114,6 +131,7 @@ def main():
 
     # close connection
     connection.close()
+    '''
 
 
 if __name__ == "__main__":
