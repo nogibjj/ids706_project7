@@ -1,0 +1,28 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Set up Virtual Environment
+        run: make setup
+      - name: Install Dependencies
+        run: make install
+      - name: Lint with ruff
+        run: make lint
+      - name: Check format with black
+        run: make format
+      - name: Test main.py
+        run: make test
